@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aplikasi Kasir</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f4f4;
+    margin:20px;
+}
+
+.container{
+    max-width:800px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align:center;
+    color:#333;
+}
+
+input, select, button{
+    padding:10px;
+    margin:5px;
+}
+
+button{
+    background:#28a745;
+    color:white;
+    border:none;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#218838;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+table, th, td{
+    border:1px solid #ddd;
+}
+
+th{
+    background:#007bff;
+    color:white;
+}
+
+th, td{
+    padding:10px;
+    text-align:center;
+}
+
+.total{
+    margin-top:20px;
+    font-size:20px;
+    font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>APLIKASI KASIR</h1>
+
+    <select id="produk">
+        <option value="5000">Air Mineral - Rp5.000</option>
+        <option value="10000">Mie Instan - Rp10.000</option>
+        <option value="15000">Kopi - Rp15.000</option>
+        <option value="20000">Roti - Rp20.000</option>
+    </select>
+
+    <input type="number" id="qty" placeholder="Jumlah" min="1" value="1">
+
+    <button onclick="tambahItem()">Tambah</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Produk</th>
+                <th>Harga</th>
+                <th>Qty</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody id="keranjang">
+        </tbody>
+    </table>
+
+    <div class="total">
+        Total: Rp <span id="total">0</span>
+    </div>
+
+    <hr>
+
+    <input type="number" id="bayar" placeholder="Uang Pembayaran">
+
+    <button onclick="hitungKembalian()">
+        Hitung Kembalian
+    </button>
+
+    <h3>Kembalian: Rp <span id="kembalian">0</span></h3>
+</div>
+
+<script>
+let totalBelanja = 0;
+
+function tambahItem(){
+    let produk = document.getElementById("produk");
+    let namaProduk = produk.options[produk.selectedIndex].text;
+    let harga = parseInt(produk.value);
+    let qty = parseInt(document.getElementById("qty").value);
+
+    let subtotal = harga * qty;
+    totalBelanja += subtotal;
+
+    let row = `
+        <tr>
+            <td>${namaProduk.split(" - ")[0]}</td>
+            <td>Rp ${harga.toLocaleString()}</td>
+            <td>${qty}</td>
+            <td>Rp ${subtotal.toLocaleString()}</td>
+        </tr>
+    `;
+
+    document.getElementById("keranjang").innerHTML += row;
+    document.getElementById("total").innerText =
+        totalBelanja.toLocaleString();
+}
+
+function hitungKembalian(){
+    let bayar = parseInt(document.getElementById("bayar").value);
+
+    if(isNaN(bayar)){
+        alert("Masukkan jumlah pembayaran!");
+        return;
+    }
+
+    if(bayar < totalBelanja){
+        alert("Uang kurang!");
+        return;
+    }
+
+    let kembalian = bayar - totalBelanja;
+
+    document.getElementById("kembalian").innerText =
+        kembalian.toLocaleString();
+}
+</script>
+
+</body>
+</html>
